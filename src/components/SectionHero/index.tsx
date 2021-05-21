@@ -1,44 +1,48 @@
-import React from 'react'
+import React from 'react';
 
-import Logo from 'components/Logo'
-import Button from 'components/Button'
-import * as S from './styles'
+import Logo from 'components/Logo';
+import Button from 'components/Button';
+import * as S from './styles';
 
-import { gaEvent } from 'utils/ga'
-import Container from 'components/Container'
+import { gaEvent } from 'utils/ga';
+import Container from 'components/Container';
+import { HeaderProps, LogoProps } from 'types/api';
+import { getImageUrl } from 'utils/getImageUrl';
 
 const onClick = () =>
-  gaEvent({ action: 'click', category: 'cta', label: 'hero button' })
+  gaEvent({ action: 'click', category: 'cta', label: 'hero button' });
 
-const SectionHero = () => (
-  <S.Wrapper>
-    <Container>
-      <Logo />
+type Props = {
+  logo: LogoProps;
+  header: HeaderProps;
+};
 
-      <S.Content>
-        <S.TextBlock>
-          <S.Title>React Avançado</S.Title>
-          <S.Description>
-            Crie aplicações reais com NextJS, Strapi, GraphQL e mais!
-          </S.Description>
-          <S.ButtonWrapper>
-            <Button
-              href="https://www.udemy.com/course/react-avancado/?couponCode=PROMOMAI21"
-              onClick={onClick}
-              wide
-            >
-              Comprar
-            </Button>
-          </S.ButtonWrapper>
-        </S.TextBlock>
+const SectionHero = ({ logo, header }: Props) => {
+  const { title, description, button: headerButton, image: headerImg } = header;
+  return (
+    <S.Wrapper>
+      <Container>
+        <Logo {...logo} />
 
-        <S.Image
-          src="/img/hero-illustration.svg"
-          alt="Ilustração de um desenvolvedor em frente a um computador com várias linhas de código."
-        />
-      </S.Content>
-    </Container>
-  </S.Wrapper>
-)
+        <S.Content>
+          <S.TextBlock>
+            <S.Title>{title}</S.Title>
+            <S.Description>{description}</S.Description>
+            <S.ButtonWrapper>
+              <Button href={headerButton.url} onClick={onClick} wide>
+                {headerButton.label}
+              </Button>
+            </S.ButtonWrapper>
+          </S.TextBlock>
 
-export default SectionHero
+          <S.Image
+            src={getImageUrl(headerImg.url)}
+            alt={headerImg.alternativeText}
+          />
+        </S.Content>
+      </Container>
+    </S.Wrapper>
+  );
+};
+
+export default SectionHero;
